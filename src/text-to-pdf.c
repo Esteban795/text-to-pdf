@@ -1,15 +1,18 @@
 /*
 In the program, I'll use the following abreviations :
 
- * cl:	catalog object	(#0)
- * pr:	page tree root	(#1)
- * pg:	page object	(#PG_BASE ~ #PG_BASE + NPAGE - 1)
- * pc:	page content	(#PC_BASE ~ #PC_BASE + NPAGE - 1)
- * cs:	content stream
- * sl:	stream length	(#SL_BASE ~ #SL_BASE + NPAGE - 1)
+ * Cl:	catalog object	(#0)
+ * Pr:	page tree root	(#1)
+ * Pg:	page object	(#PG_BASE ~ #PG_BASE + NPAGE - 1)
+ * Pc:	page content	(#PC_BASE ~ #PC_BASE + NPAGE - 1)
+ * Cs:	content stream
+ * Cl:	stream length	(#SL_BASE ~ #SL_BASE + NPAGE - 1)
  
  Also, the explanations for this project can be found here : 
  https://www.oreilly.com/library/view/pdf-explained/9781449321581/ch04.html
+ 
+ and also here : 
+ https://pypdf2.readthedocs.io/en/3.0.0/dev/pdf-format.html
  */
 
 
@@ -17,11 +20,11 @@ In the program, I'll use the following abreviations :
 #include <string.h>
 #include <stdio.h>
 
-#define NPAGE 32768
+#define NPAGE 32768 //maximum number of pages
 #define PG_BASE 32768
 #define PC_BASE (PG_BASE + NPAGE)
 #define SL_BASE (PC_BASE + NPAGE)
-#define NCOL 80 //at most 80 colums and 66 rows
+#define NCOL 80 //at most 80 colums and 66 rows, standard printer dimensions
 #define NROW 66
 
 int nByte;
@@ -34,6 +37,50 @@ int slPos[NPAGE];
 int xrefPos;
 
 
+int escape(char *s){
+	int n = 0;
+	while (*s) {
+		switch (*s) {
+            case '(':
+            case ')':
+            case '\\':{
+                putchar('\\'); //since (,) and \\ are special char, we need to escape them
+                n++;
+            }
+		    default:{
+                putchar(*s);
+                n++;
+            }
+		}
+		s++;
+	}
+	return n;
+}
+
+int genCs(FILE *in){
+	char line[NCOL + 1];
+	int n, nl, eol, ch;
+	n = 0;
+	n += printf("BT\n");
+	n += printf("11 TL\n");
+	n += printf("34 784 Td\n");
+	n += printf("/F0 11 Tf\n");
+	nl = 0;
+	while (fgets(line, sizeof(line), in)) {
+		eol = strcspn(line, "\n");
+		if (!line[eol] && (ch = fgetc(in)) != '\n')
+			ungetc(ch, in);
+		line[eol] = '\0'; //because null terminated strings
+		n += printf("T* (");
+		n += escape(line);
+		n += printf(") Tj\n");
+		if (++nl == NROW)
+			break;
+	}
+	n += printf("ET");
+	nByte += n;
+	return n;
+}
 
 void genHead(void) {
 	nByte += printf("%%PDF-1.4\n");
@@ -46,17 +93,7 @@ void genCl(void){
 	nByte += printf("endobj\n");
 }
 
-void genPg(void) {
-	pgPos[nPage] = nByte;
-	nByte += printf("%d 0 obj\n", PG_BASE + nPage);
-	nByte += printf("<< /Type /Page\n");
-	nByte += printf("/Parent 2 0 R\n");
-	nByte += printf("/Contents %d 0 R >>\n", PC_BASE + nPage);
-	nByte += printf("endobj\n");
-}
-
 int genPc(FILE* in){
-	int genCs(FILE *in);
 	int sl;
 	pcPos[nPage] = nByte;
 	nByte += printf("%d 0 obj\n", PC_BASE + nPage);
@@ -73,6 +110,15 @@ void genSl(int n){
 	slPos[nPage] = nByte;
 	nByte += printf("%d 0 obj\n", SL_BASE + nPage);
 	nByte += printf("%d\n", n);
+	nByte += printf("endobj\n");
+}
+
+void genPg(void) {
+	pgPos[nPage] = nByte;
+	nByte += printf("%d 0 obj\n", PG_BASE + nPage);
+	nByte += printf("<< /Type /Page\n");
+	nByte += printf("/Parent 2 0 R\n");
+	nByte += printf("/Contents %d 0 R >>\n", PC_BASE + nPage);
 	nByte += printf("endobj\n");
 }
 
@@ -94,7 +140,6 @@ void genPr(void){
 	nByte += printf(">>\n");
 	nByte += printf("endobj\n");
 }
-
 
 void genXref(void){
 	xrefPos = nByte;
@@ -121,51 +166,7 @@ void genTail(void){
 	puts("%%EOF");
 }
 
-int genCs(FILE *in){
-	int escape(char *s);
-	char line[NCOL+1];
-	int n, nl, eol, ch;
-	n = 0;
-	n += printf("BT\n");
-	n += printf("11 TL\n");
-	n += printf("34 784 Td\n");
-	n += printf("/F0 11 Tf\n");
-	nl = 0;
-	while (fgets(line, sizeof(line), in)) {
-		eol = strcspn(line, "\n");
-		if (!line[eol] && (ch = fgetc(in)) != '\n')
-			ungetc(ch, in);
-		line[eol] = '\0';
-		n += printf("T* (");
-		n += escape(line);
-		n += printf(") Tj\n");
-		if (++nl == NROW)
-			break;
-	}
-	n += printf("ET");
-	nByte += n;
-	return n;
-}
 
-int escape(char *s){
-	int n = 0;
-	while (*s) {
-		switch (*s) {
-		case '(':
-		case ')':
-		case '\\':{
-            putchar('\\');
-			n++;
-        }
-		default:{
-            putchar(*s);
-			n++;
-        }
-		}
-		s++;
-	}
-	return n;
-}
 
 void genPdf(FILE* in){
 	int sl;
