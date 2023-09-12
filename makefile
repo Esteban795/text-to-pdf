@@ -3,24 +3,19 @@ HEADDIR = include
 LIBDIR = ./src
 
 DEBUGFLAGS = -W -Wall -Wextra -Wvla -fsanitize=address
-FLAGS = 
-DEPENDENCIES = 
 
 build:
-	gcc $(SRCDIR)/raycaster.c -o ./bin/raycaster $(DEPENDENCIES) $(FLAGS) 
+	gcc $(SRCDIR)/text-to-pdf.c -o ./bin/text-to-pdf
 
 run:
-	./bin/raycaster
+	./bin/text-to-pdf
 
 clean:
-	rm ./bin/raycaster
+	rm ./bin/text-to-pdf
 
 debug:
-	gcc $(SRCDIR)/raycaster.c -o ./bin/raycaster $(DEPENDENCIES) $(FLAGS) $(DEBUGFLAGS) 
+	gcc $(SRCDIR)/text-to-pdf.c -o ./bin/text-to-pdf $(DEBUGFLAGS) 
 
 all:
 	make build
 	make run
-
-install:
-	apt install libglew-dev libsdl2-dev freeglut3-dev
