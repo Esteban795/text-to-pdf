@@ -47,7 +47,6 @@ void genCl(void){
 }
 
 void genPg(void) {
-	int sl;
 	pgPos[nPage] = nByte;
 	nByte += printf("%d 0 obj\n", PG_BASE + nPage);
 	nByte += printf("<< /Type /Page\n");
@@ -63,7 +62,7 @@ int genPc(FILE* in){
 	nByte += printf("%d 0 obj\n", PC_BASE + nPage);
 	nByte += printf("<< /Length %d 0 R >>\n", SL_BASE + nPage);
 	nByte += printf("stream\n");
-	sl = gencs(in);
+	sl = genCs(in);
 	nByte += printf("\nendstream\n");
 	nByte += printf("endobj\n");
 	return sl;
@@ -154,12 +153,14 @@ int escape(char *s){
 		switch (*s) {
 		case '(':
 		case ')':
-		case '\\':
-			putchar('\\');
+		case '\\':{
+            putchar('\\');
 			n++;
-		default:
-			putchar(*s);
+        }
+		default:{
+            putchar(*s);
 			n++;
+        }
 		}
 		s++;
 	}
@@ -209,6 +210,6 @@ int main(int argc, char **argv){
 		}
 	} else
 		in = stdin;
-	genpdf(in);
+	genPdf(in);
 	return 0;
 }
