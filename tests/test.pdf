@@ -1,0 +1,53 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+32768 0 obj
+<< /Type /Page
+/Parent 2 0 R
+/Contents 65536 0 R >>
+endobj
+65536 0 obj
+<< /Length 98304 0 R >>
+stream
+BT
+11 TL
+34 784 Td
+/F0 11 Tf
+T* (ceci est un test) Tj
+ET
+endstream
+endobj
+98304 0 obj
+56
+endobj
+2 0 obj
+<< /Type /Pages
+/Kids [
+32768 0 R
+]
+/Count 1
+/MediaBox [0 0 595 842]
+/Resources << /Font << /F0 <<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Courier
+>> >> >>
+>>
+endobj
+xref
+0 3
+0000000000 65535 f 
+0000000009 00000 n 
+0000000268 00000 n 
+32768 1
+0000000058 00000 n 
+65536 1
+0000000129 00000 n 
+98304 1
+0000000246 00000 n 
+trailer
+<< /Size 98305 /Root 1 0 R >>
+startxref
+441
+%%EOF

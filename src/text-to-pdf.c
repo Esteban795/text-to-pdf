@@ -189,28 +189,36 @@ void genPdf(FILE* in){
 }
 
 
-int main(int argc, char **argv){
-	FILE *in;
+int main(int argc, char* argv[]){
+	FILE* in;
 	if (argc > 2) {
 		fprintf(stderr, "Here's how to use the program : ./bin/text-to-pdf [filepath]\n");
 		exit(-1);
 	}
-	argv++;
-	if (*argv && !strcmp(*argv, "--help")) {
+	if (argv[1] && !strcmp(argv[1], "--help")) {
 		printf("Here's how to use the program : ./bin/text-to-pdf [filepath]\n\n");
 		exit(0);
 	}
-	if (*argv && !strcmp(*argv, "--version")) {
+	if (argv[1] && !strcmp(argv[1], "--version")) {
 		printf("%s %s\n%s\n", "text-to-pdf", "0.1", "Esteban795");
 		exit(0);
 	}
-	if (*argv) {
-		if (!(in=fopen(*argv, "r"))) {
+	if (argv[1]) {
+		if (!(in = fopen(argv[1], "r"))) {
 			perror("text-to-pdf");
 			exit(-1);
 		}
-	} else
+	} else {//no arguments means stdin is considered the input file
 		in = stdin;
+	}
+	int len = strlen(argv[1]);
+	char* outName = malloc(sizeof(char) * (len + 1));
+	strcpy(outName,argv[1]);
+	outName[len - 3] = 'p';
+	outName[len - 2] = 'd';
+	outName[len - 1] = 'f';
+	stdout = fopen(outName,"w");
 	genPdf(in);
+	free(outName);
 	return 0;
 }
