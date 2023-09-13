@@ -32,9 +32,18 @@ and then, use the program as you wish :
 ```
 - It should print you the actual PDF source code to stdin. I'm still working on a way to let you give the program an output file and overwrites what's already in them.
 <br/>
+<br/>
 
+### Example 
+- Here is a quick example, with an input file located in `tests/test.txt` directory : 
+![txt_file](pics/file_txt.png)
+
+- After running the command and opening the PDF file, you should have this : 
+![pdf _file](pics/file_pdf.png)
+
+Here it is !
 
 ### Objectives 
 
-- Write directly to an output file (given by the user)
-- Do the other way : pdf-to-text !
+- ~~Write directly to an output file.~~ ✅
+- Do the other way : pdf-to-text ! 

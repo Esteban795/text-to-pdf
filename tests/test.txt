@@ -1,1 +1,7 @@
-ceci est un test
+This example perfectly showcases that the program, in fact, definitely works
+
+
+
+(as intended...)
+
+

@@ -14,12 +14,16 @@ BT
 11 TL
 34 784 Td
 /F0 11 Tf
-T* (ceci est un test) Tj
+T* (This example perfectly showcases that the program, in fact, definitely works) Tj
+T* () Tj
+T* () Tj
+T* () Tj
+T* (\(as intended...\)) Tj
 ET
 endstream
 endobj
 98304 0 obj
-56
+170
 endobj
 2 0 obj
 << /Type /Pages
@@ -39,15 +43,15 @@ xref
 0 3
 0000000000 65535 f 
 0000000009 00000 n 
-0000000268 00000 n 
+0000000383 00000 n 
 32768 1
 0000000058 00000 n 
 65536 1
 0000000129 00000 n 
 98304 1
-0000000246 00000 n 
+0000000360 00000 n 
 trailer
 << /Size 98305 /Root 1 0 R >>
 startxref
-441
+556
 %%EOF
