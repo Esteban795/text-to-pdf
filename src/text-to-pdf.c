@@ -212,13 +212,13 @@ int main(int argc, char* argv[]){
 		in = stdin;
 	}
 	int len = strlen(argv[1]);
-	// char* outName = malloc(sizeof(char) * (len + 1));
-	// strcpy(outName,argv[1]);
-	// outName[len - 3] = 'p';
-	// outName[len - 2] = 'd';
-	// outName[len - 1] = 'f';
-	stdout = fopen("retest.txt","w");
+	char* outName = malloc(sizeof(char) * (len + 1));
+	strcpy(outName,argv[1]);
+	outName[len - 3] = 'p';
+	outName[len - 2] = 'd';
+	outName[len - 1] = 'f';
+	stdout = fopen(outName,"w");
 	genPdf(in);
-	//free(outName);
+	free(outName);
 	return 0;
 }
